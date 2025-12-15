@@ -1,0 +1,31 @@
+# build artifacts
+target/
+build/
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+
+# VCS
+.git/
+.gitignore
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# logs
+*.log
+logs/
+
+# tests reports / misc
+**/surefire-reports/
+**/failsafe-reports/
+.github/
+
+# env
+.env
+.env.*
