@@ -24,15 +24,11 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody @Valid RegisterRequest req) {
-        try {
-            var u = authService.register(req);
-            return ResponseEntity.ok(Map.of(
-                    "id", u.getId(),
-                    "username", Encode.forHtmlContent(u.getUsername())
-            ));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        var u = authService.register(req);
+        return ResponseEntity.ok(Map.of(
+                "id", u.getId(),
+                "username", Encode.forHtmlContent(u.getUsername())
+        ));
     }
 
     @PostMapping("/login")

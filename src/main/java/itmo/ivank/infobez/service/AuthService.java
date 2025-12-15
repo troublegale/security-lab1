@@ -5,11 +5,13 @@ import itmo.ivank.infobez.dto.RegisterRequest;
 import itmo.ivank.infobez.entity.User;
 import itmo.ivank.infobez.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +24,7 @@ public class AuthService {
 
     public User register(RegisterRequest req) {
         if (userRepo.existsByUsername(req.username())) {
-            throw new RuntimeException("Username already taken");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username already taken");
         }
         User u = new User();
         u.setUsername(req.username());
