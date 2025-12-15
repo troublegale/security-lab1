@@ -128,7 +128,7 @@
 				<version>4.8.6.6</version>
 				<configuration>
 					<effort>Max</effort>
-					<threshold>Low</threshold>
+					<threshold>Medium</threshold>
 				</configuration>
 				<executions>
 					<execution>
