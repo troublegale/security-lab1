@@ -21,18 +21,21 @@ jobs:
           java-version: '17'
           cache: maven
 
+      - name: Make mvnw executable
+        run: |
+          if [ -f "./mvnw" ]; then chmod +x ./mvnw; fi
+
       - name: Build + SpotBugs
         run: mvn -B -DskipTests clean verify
 
+      - name: Set up Snyk
+        uses: snyk/actions/setup@master
+
       - name: Snyk test
-        uses: snyk/actions/maven@master
         continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-          JAVA_HOME: ""
-          JAVA_HOME_17_X64: ""
-        with:
-          args: --all-projects --json-file-output=target/snyk-report.json
+        run: snyk test --all-projects --json-file-output=target/snyk-report.json
 
       - name: Upload SpotBugs reports
         if: always()
