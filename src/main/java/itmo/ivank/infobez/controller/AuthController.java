@@ -6,12 +6,14 @@ import itmo.ivank.infobez.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.owasp.encoder.Encode;
-import org.springframework.http.HttpStatusCode;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -24,10 +26,10 @@ public class AuthController {
     public ResponseEntity<?> register(@RequestBody @Valid RegisterRequest req) {
         try {
             var u = authService.register(req);
-            return ResponseEntity.ok(new java.util.LinkedHashMap<String, Object>() {{
-                put("id", u.getId());
-                put("username", Encode.forHtmlContent(u.getUsername()));
-            }});
+            return ResponseEntity.ok(Map.of(
+                    "id", u.getId(),
+                    "username", Encode.forHtmlContent(u.getUsername())
+            ));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -37,12 +39,12 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody @Valid LoginRequest req) {
         try {
             String token = authService.login(req);
-            return ResponseEntity.ok(new java.util.LinkedHashMap<String, Object>() {{
-                put("tokenType", "Bearer");
-                put("token", token);
-            }});
+            return ResponseEntity.ok(Map.of(
+                    "tokenType", "Bearer",
+                    "token", token
+            ));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatusCode.valueOf(401)).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
     }
 

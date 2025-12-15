@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.LinkedHashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -17,13 +17,15 @@ public class DataController {
 
     private final UserRepository userRepo;
 
+
     @GetMapping("/data")
-    public List<?> data() {
-        return userRepo.findAll().stream().map(u -> new LinkedHashMap<String, Object>() {{
-            put("id", u.getId());
-            put("username", Encode.forHtmlContent(u.getUsername()));
-            put("role", Encode.forHtmlContent(u.getRole()));
-        }}).toList();
+    public List<Map<String, Object>> data() {
+        return userRepo.findAll().stream()
+                .map(u -> Map.of(
+                        "id", (Object) u.getId(),
+                        "username", Encode.forHtmlContent(u.getUsername()),
+                        "role", Encode.forHtmlContent(u.getRole())
+                )).toList();
     }
 
 }
