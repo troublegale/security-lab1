@@ -1,3 +1,19 @@
+server:
+  port: 8088
+
 spring:
   application:
     name: infobez
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+
+security:
+  jwt:
+    secret: c288d7350c49fa791e8fcace26e9dcf58dbd2c5a4e2f70e343caa5476ef9ee16
+    ttlMinutes: 60
