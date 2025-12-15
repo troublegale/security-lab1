@@ -18,8 +18,10 @@ jobs:
           java-version: '17'
           cache: maven
 
-      - name: Build + Tests + SpotBugs + Dependency-Check
-        run: mvn -B clean verify
+      - name: Build + SpotBugs + Dependency-Check
+        env:
+          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
+        run: mvn -B clean verify -Dnvd.api.key=$NVD_API_KEY
 
       - name: Upload Dependency-Check reports
         if: always()
