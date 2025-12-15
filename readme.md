@@ -4,8 +4,6 @@
 - **SAST**: SpotBugs
 - **SCA**: Snyk
 
----
-
 ## Стек
 
 - Java 17
@@ -16,13 +14,9 @@
 - OWASP Java Encoder (экранирование данных)
 - CI: GitHub Actions + SpotBugs + Snyk
 
----
-
 ## Запуск проекта
 
 `docker compose up -d --build`
-
----
 
 ## API
 
