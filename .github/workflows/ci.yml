@@ -24,7 +24,7 @@ jobs:
       - name: Build + SpotBugs + Snyk
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        run: mvn -B clean verify
+        run: mvn -B -e clean verify
 
       - name: Upload SpotBugs reports
         if: always()
@@ -40,5 +40,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: snyk-report
-          path: |
-            target/snyk-report.json
+          path: target/snyk-report.json
