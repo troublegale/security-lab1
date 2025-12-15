@@ -1,27 +1,36 @@
 package itmo.ivank.infobez.service;
 
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.nio.charset.StandardCharsets;
-import java.security.Key;
+import javax.crypto.SecretKey;
 import java.time.Instant;
 import java.util.Date;
 
 @Service
 public class JwtService {
 
-    private final Key key;
+    private final String secret;
     private final long ttlMinutes;
+
+    private SecretKey key;
 
     public JwtService(
             @Value("${security.jwt.secret}") String secret,
             @Value("${security.jwt.ttlMinutes}") long ttlMinutes
     ) {
-        this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+        this.secret = secret;
         this.ttlMinutes = ttlMinutes;
+    }
+
+    @PostConstruct
+    void init() {
+        byte[] keyBytes = Decoders.BASE64.decode(secret);
+        this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
     public String generate(String subject) {
@@ -36,7 +45,7 @@ public class JwtService {
     }
 
     public String validateAndGetSubject(String token) {
-        var parser = Jwts.parser().verifyWith((javax.crypto.SecretKey) key).build();
+        var parser = Jwts.parser().verifyWith(key).build();
         return parser.parseSignedClaims(token).getPayload().getSubject();
     }
 
