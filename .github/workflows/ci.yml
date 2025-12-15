@@ -21,10 +21,16 @@ jobs:
           java-version: '17'
           cache: maven
 
-      - name: Build + SpotBugs + Snyk
+      - name: Build + SpotBugs
+        run: mvn -B -DskipTests clean verify
+
+      - name: Snyk test
+        uses: snyk/actions/maven@master
+        continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        run: mvn -B -e clean verify
+        with:
+          args: --all-projects --json-file-output=target/snyk-report.json
 
       - name: Upload SpotBugs reports
         if: always()
