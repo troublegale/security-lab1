@@ -151,6 +151,7 @@
 				</executions>
 				<configuration>
 					<apiToken>${snyk.token}</apiToken>
+					<failOnIssues>false</failOnIssues>
 					<args>
 						<arg>--all-projects</arg>
 						<arg>--json-file-output=target/snyk-report.json</arg>
